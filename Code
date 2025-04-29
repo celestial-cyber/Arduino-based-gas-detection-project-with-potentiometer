@@ -1,0 +1,46 @@
+float temp;
+float vout;
+float vout1;
+int led = 13;
+int gas_sensor;
+int piezo = 7;
+
+void setup() {
+  pinMode(A0, INPUT);      // Simulated Gas sensor
+  pinMode(A1, INPUT);      // Temperature sensor
+  pinMode(led, OUTPUT);    // LED
+  pinMode(piezo, OUTPUT);  // Buzzer
+  Serial.begin(9600);
+}
+
+void loop() {
+  // Read temperature sensor
+  vout = analogRead(A1);
+  vout1 = (vout / 1023.0) * 5000;
+  temp = (vout1 - 500) / 10;
+
+  // Read simulated gas value
+  gas_sensor = analogRead(A0);
+
+  // Temperature LED alert
+  if (temp >= 20) {
+    digitalWrite(led, HIGH);
+  } else {
+    digitalWrite(led, LOW);
+  }
+
+  // Buzzer alert for gas
+  if (gas_sensor >= 100) {
+    digitalWrite(piezo, HIGH);
+  } else {
+    digitalWrite(piezo, LOW);
+  }
+
+  // Print readings
+  Serial.print("Temperature (°C): ");
+  Serial.print(temp);
+  Serial.print("\tGas Value: ");
+  Serial.println(gas_sensor);
+
+  delay(1000);
+}
